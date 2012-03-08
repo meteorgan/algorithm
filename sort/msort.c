@@ -237,7 +237,7 @@ int partition1(int *arr, int start, int end)
 		while((i <= end)&&(arr[i] < pivot))
 			i++;
 		while((j >= start)&&(arr[j] > pivot))
-			j++;
+			j--;
 		if(i < j)
 			exchange(&arr[i], &arr[j]);
 		else
@@ -267,7 +267,7 @@ int randomized_partition(int *arr, int start, int end)
 {
 	int pivot = random()/RAND_MAX *(end - start) + start;
 	exchange(&arr[pivot], &arr[end]);
-	return partition(arr, start, end);
+	return partition1(arr, start, end);
 }
 
 void shell_sort(int *arr, int size)
