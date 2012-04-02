@@ -54,6 +54,26 @@ headNode* addEdge(headNode *listHead, int v, int u)
 		vnode->neighbor = unode;
 	}
 
+	// if key u not in the list, insert it.
+	int isexisted = 0;
+	head = listHead;
+	last = head;
+	while(head != NULL)
+	{
+		if(head->key == u)
+		{
+			isexisted = 1;
+			break;
+		}
+		last = head;
+		head = head->next;
+	}
+	if(!isexisted)
+	{
+		headNode *newNode= makeHeadNode(u);
+	    last->next = newNode;	
+	}
+
 	return listHead;
 }
 
@@ -98,7 +118,7 @@ void removeEdge(headNode *listHead, int v, int u)
 	}	
 }
 
-int inDegree(headNode *listHead, int v)
+int outDegree(headNode *listHead, int v)
 {
 	int degree= 0;
 	while(listHead != NULL)
@@ -120,7 +140,7 @@ int inDegree(headNode *listHead, int v)
 	return degree;
 }
 
-int outDegree(headNode *listHead, int v)
+int inDegree(headNode *listHead, int v)
 {
 	int degree = 0;
 	while(listHead != NULL)
@@ -160,4 +180,41 @@ headNode* findNode(headNode *listHead, int key)
 	}
 
 	return listHead;
+}
+
+
+int* getAllNeighbours(headNode *list, int key)
+{
+	headNode *node = findNode(list, key);
+	adjNode *adj = node->neighbor;
+	int size = outDegree(list, key);
+	
+	int *neighbours = (int*)malloc(sizeof(int)*size);
+	int i = 0;
+	while(adj != NULL)
+	{
+		neighbours[i] = adj->key;
+		i++;
+		adj = adj->next;
+	}	
+
+	return neighbours;
+}
+
+void getInDegrees(headNode *list, int *degree, int size)
+{
+	int i = 0;
+	for(i = 0; i < size; i++)
+		degree[i] = 0;
+
+	while(list != NULL)
+	{
+		adjNode *node = list->neighbor;
+		while(node != NULL)
+		{
+			degree[node->key]++;
+			node = node->next;
+		}
+		list = list->next;
+	}
 }
